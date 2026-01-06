@@ -12,6 +12,7 @@ public class SubCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "subcategory_name", unique = true)
     private String name;
     private String description;
 
