@@ -3,6 +3,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,7 @@ public class UserController {
     }
 
     @GetMapping
+    @CacheEvict(value = "users", allEntries = true)
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userRepository.findAll();
 
@@ -43,6 +45,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @CacheEvict(value = "users", allEntries = true)
     public ResponseEntity<User> getUserById(@PathVariable String id) {
         Optional<User> foundUser = userRepository.findById(id);
 
@@ -50,6 +53,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @CacheEvict(value = "users", allEntries = true)
     public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user) {
         return userRepository.findById(id)
                 .map(existingUser -> {

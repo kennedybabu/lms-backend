@@ -24,6 +24,10 @@ public class Course {
     private String description;
 
     @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @ManyToOne
     @JoinColumn(name = "subcategory_id")
     private SubCategory subcategory;
 

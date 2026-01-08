@@ -42,14 +42,14 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable String id) {
-        Optional<Category> foundCategory = categoryRepository.findById(Long.valueOf(id));
+        Optional<Category> foundCategory = categoryRepository.findById(id);
 
         return foundCategory.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Category> updateCategory(@PathVariable String id, @RequestBody Category category) {
-        return categoryRepository.findById(Long.valueOf(id))
+        return categoryRepository.findById(id)
                 .map(existingCategory -> {
                     existingCategory.setName(category.getName());
                     existingCategory.setDescription(category.getDescription());
@@ -64,7 +64,7 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteCategory(@PathVariable String id) {
-        return categoryRepository.findById(Long.valueOf(id))
+        return categoryRepository.findById(id)
                 .map(category -> {
                     categoryRepository.delete(category);
                     return ResponseEntity.ok().build();

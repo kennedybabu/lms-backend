@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +21,6 @@ public class Category {
     private String description;
 
     @OneToMany
-    private List<SubCategory> subCategories;
+    private List<SubCategory> subCategories = new ArrayList<>();
 
 }
