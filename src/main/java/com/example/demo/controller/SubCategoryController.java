@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/sub-categories")
@@ -38,14 +39,14 @@ public class SubCategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SubCategory> getSubCategoryById(@PathVariable String id) {
+    public ResponseEntity<SubCategory> getSubCategoryById(@PathVariable UUID id) {
         Optional<SubCategory> foundSubCategory = subCategoryRepository.findById(id);
 
         return foundSubCategory.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SubCategory> updateSubCategory(@PathVariable String id, SubCategory subCategory) {
+    public ResponseEntity<SubCategory> updateSubCategory(@PathVariable UUID id, SubCategory subCategory) {
         return subCategoryRepository.findById(id)
                 .map(existingSubCategory -> {
                     existingSubCategory.setName(subCategory.getName());
@@ -59,7 +60,7 @@ public class SubCategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteSubCategory(@PathVariable String id) {
+    public ResponseEntity<Object> deleteSubCategory(@PathVariable UUID id) {
         return subCategoryRepository.findById(id)
                 .map(subCategory -> {
                     subCategoryRepository.delete(subCategory);
@@ -67,6 +68,5 @@ public class SubCategoryController {
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 
 }

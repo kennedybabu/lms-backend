@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/categories")
@@ -41,14 +42,14 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable String id) {
+    public ResponseEntity<Category> getCategoryById(@PathVariable UUID id) {
         Optional<Category> foundCategory = categoryRepository.findById(id);
 
         return foundCategory.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable String id, @RequestBody Category category) {
+    public ResponseEntity<Category> updateCategory(@PathVariable UUID id, @RequestBody Category category) {
         return categoryRepository.findById(id)
                 .map(existingCategory -> {
                     existingCategory.setName(category.getName());
@@ -63,7 +64,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteCategory(@PathVariable String id) {
+    public ResponseEntity<Object> deleteCategory(@PathVariable UUID id) {
         return categoryRepository.findById(id)
                 .map(category -> {
                     categoryRepository.delete(category);
@@ -71,6 +72,4 @@ public class CategoryController {
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
-
 }

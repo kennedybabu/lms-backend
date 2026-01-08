@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -46,7 +47,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     @CacheEvict(value = "users", allEntries = true)
-    public ResponseEntity<User> getUserById(@PathVariable String id) {
+    public ResponseEntity<User> getUserById(@PathVariable UUID id) {
         Optional<User> foundUser = userRepository.findById(id);
 
         return foundUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
@@ -54,7 +55,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     @CacheEvict(value = "users", allEntries = true)
-    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@PathVariable UUID id, @RequestBody User user) {
         return userRepository.findById(id)
                 .map(existingUser -> {
                     existingUser.setUserRole(user.getUserRole());
@@ -69,7 +70,7 @@ public class UserController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteUser(@PathVariable String id) {
+    public ResponseEntity<Object> deleteUser(@PathVariable UUID id) {
         return userRepository.findById(id)
                 .map(user -> {
                     userRepository.delete(user);
