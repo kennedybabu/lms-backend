@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.dto.course;
 
 import com.example.demo.entity.data.CourseLevel;
 import lombok.Data;

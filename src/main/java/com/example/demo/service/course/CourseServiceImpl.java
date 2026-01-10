@@ -1,7 +1,7 @@
-package com.example.demo.service;
+package com.example.demo.service.course;
 
-import com.example.demo.dto.CourseRequest;
-import com.example.demo.dto.CourseResponse;
+import com.example.demo.dto.course.CourseRequest;
+import com.example.demo.dto.course.CourseResponse;
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Course;
 import com.example.demo.entity.SubCategory;
@@ -31,7 +31,6 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-//    @Transactional
     public CourseResponse createCourse(CourseRequest request) {
         if(courseRepository.findByTitle(request.getTitle()).isPresent()) {
             throw new RuntimeException("Course with title '" + request.getTitle() + "' already exists");
@@ -69,7 +68,7 @@ public class CourseServiceImpl implements CourseService {
                 course.getTitle(),
                 course.getDescription(),
                 course.getCategory().getId(),
-                course.getCategory().getName(),
+                course.getCategory().getTitle(),
                 course.getSubcategory().getId(),
                 course.getSubcategory().getName(),
                 course.getInstructor().getId(),

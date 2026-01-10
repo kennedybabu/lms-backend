@@ -1,14 +1,14 @@
 package com.example.demo.controller;
 
 
-import com.example.demo.dto.CourseRequest;
-import com.example.demo.dto.CourseResponse;
+import com.example.demo.dto.course.CourseRequest;
+import com.example.demo.dto.course.CourseResponse;
 import com.example.demo.entity.Course;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.SubCategoryRepository;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.CourseService;
+import com.example.demo.service.course.CourseService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -87,12 +87,7 @@ public class CourseController {
         Page<Course> courses = courseRepository.findByInstructorId(instructorsId, pageable);
         return ResponseEntity.ok(courses);
     }
-
-
-//    @GetMapping
-//    public Page<Course> getPaginatedCourses(Pageable pageable) {
-//        return courseRepository.findAll(pageable);
-//    }
+    
 
     @PutMapping("/{id}")
     public ResponseEntity<Course> updateCourse(@PathVariable UUID id,@RequestBody Course course) {
@@ -124,7 +119,7 @@ public class CourseController {
                 course.getTitle(),
                 course.getDescription(),
                 course.getCategory().getId(),
-                course.getCategory().getName(),
+                course.getCategory().getTitle(),
                 course.getSubcategory().getId(),
                 course.getSubcategory().getName(),
                 course.getInstructor().getId(),
