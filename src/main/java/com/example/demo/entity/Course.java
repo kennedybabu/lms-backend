@@ -35,7 +35,7 @@ public class Course {
     @JoinColumn(name = "instructor_id")
     private User instructor;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private CourseLevel level;
 
     @Transient
