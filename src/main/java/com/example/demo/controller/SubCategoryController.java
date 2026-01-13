@@ -1,8 +1,11 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.dto.subcategory.SubCategoryRequest;
+import com.example.demo.dto.subcategory.SubCategoryResponse;
 import com.example.demo.entity.SubCategory;
 import com.example.demo.repository.SubCategoryRepository;
+import com.example.demo.service.subcategory.SubCategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,21 +18,34 @@ import java.util.UUID;
 @RequestMapping("/sub-categories")
 public class SubCategoryController {
     private final SubCategoryRepository subCategoryRepository;
+    private final SubCategoryService subCategoryService;
 
-    public SubCategoryController(SubCategoryRepository subCategoryRepository) {
+    public SubCategoryController(SubCategoryRepository subCategoryRepository, SubCategoryService subCategoryService) {
         this.subCategoryRepository = subCategoryRepository;
+        this.subCategoryService = subCategoryService;
     }
 
     @PostMapping
-    public ResponseEntity<SubCategory> createSubCategory(@RequestBody SubCategory subCategory) {
+    public ResponseEntity<SubCategoryResponse> createSubCategory(@RequestBody SubCategoryRequest request) {
 
-        Optional<SubCategory> existingSubCategory = subCategoryRepository.findByName(subCategory.getName());
-
-        if(existingSubCategory.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+//        Optional<SubCategory> existingSubCategory = subCategoryRepository.findByName(request.getName());
+//
+//        if(existingSubCategory.isPresent()) {
+//            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+//        }
+//        SubCategory savedSubCategory = subCategoryRepository.save(subCategory);
+        try {
+            SubCategoryResponse response = subCategoryService.createSubcategory(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RuntimeException e) {
+            if(e.getMessage().contains("already exists")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
+            if(e.getMessage().contains("not found")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        SubCategory savedSubCategory = subCategoryRepository.save(subCategory);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedSubCategory);
     }
 
     @GetMapping

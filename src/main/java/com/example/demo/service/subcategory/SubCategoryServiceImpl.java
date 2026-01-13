@@ -10,6 +10,8 @@ import com.example.demo.repository.SubCategoryRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 
 @Service
 public class SubCategoryServiceImpl implements SubCategoryService {
@@ -44,6 +46,8 @@ public class SubCategoryServiceImpl implements SubCategoryService {
         subCategory.setCategory(category);
 
         subCategory.setCategory(category);
+        subCategory.setCreatedAt(LocalDateTime.now());
+        subCategory.setUpdatedAt(LocalDateTime.now());
 
         SubCategory savedSubcategory = subCategoryRepository.save(subCategory);
         return mapToResponse(savedSubcategory);

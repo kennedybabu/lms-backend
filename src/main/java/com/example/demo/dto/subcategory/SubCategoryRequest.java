@@ -10,6 +10,4 @@ public class SubCategoryRequest {
     private String description;
     private UUID creatorId;
     private UUID categoryId;
-    private String categoryName;
-    private String creatorName;
 }
