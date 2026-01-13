@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.dto.category.CategoryRequest;
 import com.example.demo.dto.category.CategoryResponse;
 import com.example.demo.entity.Category;
 import com.example.demo.repository.CategoryRepository;
+import com.example.demo.service.category.CategoryService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,22 +22,33 @@ import java.util.UUID;
 public class CategoryController {
 
     private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
-    public CategoryController(CategoryRepository categoryRepository) {
+    public CategoryController(CategoryRepository categoryRepository, CategoryService categoryService) {
         this.categoryRepository = categoryRepository;
+        this.categoryService = categoryService;
     }
 
     // crud operations
     @PostMapping
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-        Optional<Category> existingCategory = categoryRepository.findByTitle(category.getTitle());
-
-        if(existingCategory.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest request) {
+//        Optional<Category> existingCategory = categoryRepository.findByTitle(request.getTitle());
+//
+//        if(existingCategory.isPresent()) {
+//            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+//        }
+//
+//        CategoryResponse response = categoryRepository.save(request);
+        try {
+            CategoryResponse response = categoryService.createCategory(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RuntimeException e) {
+            if(e.getMessage().contains("already exists")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-
-        Category savedCategory = categoryRepository.save(category);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
     }
 
     @GetMapping

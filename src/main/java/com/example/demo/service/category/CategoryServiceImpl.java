@@ -8,6 +8,8 @@ import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -34,12 +36,14 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new RuntimeException("Creator not found"));
 
         category.setCreator(creator);
+        category.setCreatedAt(LocalDateTime.now());
+        category.setUpdatedAt(LocalDateTime.now());
 
         Category savedCategory = categoryRepository.save(category);
-        return mapToCategory(savedCategory);
+        return mapToResponse(savedCategory);
     }
 
-    private CategoryResponse mapToCategory(Category category) {
+    private CategoryResponse mapToResponse(Category category) {
         return new CategoryResponse(
                 category.getId(),
                 category.getTitle(),

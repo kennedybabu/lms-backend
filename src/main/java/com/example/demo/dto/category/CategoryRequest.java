@@ -10,5 +10,4 @@ public class CategoryRequest {
     private String title;
     private String description;
     private UUID creatorId;
-    private String creatorName;
 }

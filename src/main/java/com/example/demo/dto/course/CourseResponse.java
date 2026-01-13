@@ -11,7 +11,7 @@ public record CourseResponse (
     String title,
     String description,
     UUID categoryId,
-    String categoryName,
+    String categoryTitle,
     UUID subcategoryId,
     String subcategoryName,
     UUID instructorId,
