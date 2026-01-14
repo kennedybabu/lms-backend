@@ -9,6 +9,7 @@ import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.SubCategoryRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.course.CourseService;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,7 @@ public class CourseController {
 
     //crud operations
     @PostMapping
+    @CacheEvict(value = "courses", allEntries = true)
     public ResponseEntity<CourseResponse> createCourse(@RequestBody CourseRequest request) {
         try {
             CourseResponse response = courseService.createCourse(request);
@@ -49,6 +51,7 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
+    @CacheEvict(value = "courses", allEntries = true)
     public ResponseEntity<Course> getCourseById(@PathVariable UUID id) {
         Optional<Course> foundCourse = courseRepository.findById(id);
 
@@ -56,6 +59,7 @@ public class CourseController {
     }
 
     @GetMapping
+    @CacheEvict(value = "courses", allEntries = true)
     public ResponseEntity<Page<CourseResponse>> getAllCourses(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -90,6 +94,7 @@ public class CourseController {
     
 
     @PutMapping("/{id}")
+    @CacheEvict(value = "courses", allEntries = true)
     public ResponseEntity<Course> updateCourse(@PathVariable UUID id,@RequestBody Course course) {
         return courseRepository.findById(id)
                 .map(existingCourse -> {
@@ -104,6 +109,7 @@ public class CourseController {
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(value = "courses", key = "#id")
     public ResponseEntity<Object> deleteCourse(@PathVariable UUID id) {
         return courseRepository.findById(id)
                 .map(course -> {

@@ -6,6 +6,7 @@ import com.example.demo.dto.category.CategoryResponse;
 import com.example.demo.entity.Category;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.service.category.CategoryService;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,14 +32,8 @@ public class CategoryController {
 
     // crud operations
     @PostMapping
+    @CacheEvict(value = "categories", allEntries = true)
     public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest request) {
-//        Optional<Category> existingCategory = categoryRepository.findByTitle(request.getTitle());
-//
-//        if(existingCategory.isPresent()) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-//        }
-//
-//        CategoryResponse response = categoryRepository.save(request);
         try {
             CategoryResponse response = categoryService.createCategory(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -48,10 +43,10 @@ public class CategoryController {
             }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-//        return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
     }
 
     @GetMapping
+    @CacheEvict(value = "categories", allEntries = true)
     public ResponseEntity<Page<CategoryResponse>> getAllCategories(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -70,6 +65,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
+    @CacheEvict(value = "categories", allEntries = true)
     public ResponseEntity<Category> getCategoryById(@PathVariable UUID id) {
         Optional<Category> foundCategory = categoryRepository.findById(id);
 
@@ -77,6 +73,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
+    @CacheEvict(value = "categories", allEntries = true)
     public ResponseEntity<Category> updateCategory(@PathVariable UUID id, @RequestBody Category category) {
         return categoryRepository.findById(id)
                 .map(existingCategory -> {
@@ -92,6 +89,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(value = "categories", key = "#id")
     public ResponseEntity<Object> deleteCategory(@PathVariable UUID id) {
         return categoryRepository.findById(id)
                 .map(category -> {

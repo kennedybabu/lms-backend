@@ -23,6 +23,7 @@ public class UserController {
     }
 
     @PostMapping
+    @CacheEvict(value = "users", allEntries = true)
     public ResponseEntity<User> createUser(@RequestBody User user) {
 //        User savedUser = userRepository.save(user);
 //        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
@@ -70,6 +71,7 @@ public class UserController {
 
 
     @DeleteMapping("/{id}")
+    @CacheEvict(value = "books", key = "#id")
     public ResponseEntity<Object> deleteUser(@PathVariable UUID id) {
         return userRepository.findById(id)
                 .map(user -> {

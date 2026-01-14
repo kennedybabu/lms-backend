@@ -6,6 +6,7 @@ import com.example.demo.dto.subcategory.SubCategoryResponse;
 import com.example.demo.entity.SubCategory;
 import com.example.demo.repository.SubCategoryRepository;
 import com.example.demo.service.subcategory.SubCategoryService;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,14 +27,8 @@ public class SubCategoryController {
     }
 
     @PostMapping
+    @CacheEvict(value = "subcategories", allEntries = true)
     public ResponseEntity<SubCategoryResponse> createSubCategory(@RequestBody SubCategoryRequest request) {
-
-//        Optional<SubCategory> existingSubCategory = subCategoryRepository.findByName(request.getName());
-//
-//        if(existingSubCategory.isPresent()) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-//        }
-//        SubCategory savedSubCategory = subCategoryRepository.save(subCategory);
         try {
             SubCategoryResponse response = subCategoryService.createSubcategory(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -49,12 +44,14 @@ public class SubCategoryController {
     }
 
     @GetMapping
+    @CacheEvict(value = "subcategories", allEntries = true)
     public ResponseEntity<List<SubCategory>> getAllSubCategories() {
         List<SubCategory> subCategories = subCategoryRepository.findAll();
         return ResponseEntity.ok(subCategories);
     }
 
     @GetMapping("/{id}")
+    @CacheEvict(value = "subcategories", allEntries = true)
     public ResponseEntity<SubCategory> getSubCategoryById(@PathVariable UUID id) {
         Optional<SubCategory> foundSubCategory = subCategoryRepository.findById(id);
 
@@ -62,6 +59,7 @@ public class SubCategoryController {
     }
 
     @PutMapping("/{id}")
+    @CacheEvict(value = "subcategories", allEntries = true)
     public ResponseEntity<SubCategory> updateSubCategory(@PathVariable UUID id, SubCategory subCategory) {
         return subCategoryRepository.findById(id)
                 .map(existingSubCategory -> {
@@ -76,6 +74,7 @@ public class SubCategoryController {
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(value = "subcategories", key = "#id")
     public ResponseEntity<Object> deleteSubCategory(@PathVariable UUID id) {
         return subCategoryRepository.findById(id)
                 .map(subCategory -> {
