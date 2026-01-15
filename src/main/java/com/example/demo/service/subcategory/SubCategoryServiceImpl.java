@@ -51,7 +51,6 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
         SubCategory savedSubcategory = subCategoryRepository.save(subCategory);
         return mapToResponse(savedSubcategory);
-
     }
 
     private SubCategoryResponse mapToResponse(SubCategory subCategory) {

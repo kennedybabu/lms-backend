@@ -37,9 +37,13 @@ public class CourseController {
     @CacheEvict(value = "courses", allEntries = true)
     public ResponseEntity<CourseResponse> createCourse(@RequestBody CourseRequest request) {
         try {
+            System.out.println("---Received course request-----");
             CourseResponse response = courseService.createCourse(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (RuntimeException e) {
+            System.err.println("Err: " + e.getMessage());
+            e.printStackTrace();
+
             if(e.getMessage().contains("already exists")) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).build();
             }
