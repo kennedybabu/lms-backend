@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -30,6 +31,7 @@ public class SubCategory {
     private Category category;
 
     @OneToMany(mappedBy = "subcategory")
+    @JsonIgnore
     private List<Course> courses = new ArrayList<>();
 
     private LocalDateTime createdAt;

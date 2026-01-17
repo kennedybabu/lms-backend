@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -26,7 +27,8 @@ public class Category {
     @JoinColumn(name = "creator_id")
     private User creator;
 
-    @OneToMany
+    @OneToMany(mappedBy = "category")
+    @JsonIgnore
     private List<SubCategory> subCategories = new ArrayList<>();
 
     private LocalDateTime createdAt;
